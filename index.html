@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>UtiTeam - Progetti Python minimalisti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050608;
+      --bg-alt: #0b0d12;
+      --accent: #4ade80;
+      --accent-soft: rgba(74, 222, 128, 0.12);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --card: #0f172a;
+      --radius: 14px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.92),
+        rgba(15, 23, 42, 0.75),
+        transparent
+      );
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+   .brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10%;
+  overflow: hidden;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+    .brand-text-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      font-size: 15px;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: 0.18s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 20px 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 840px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 28px;
+      }
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    .hero-kicker span {
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 40px);
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      margin-bottom: 10px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(to right, #4ade80, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 460px;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+    }
+
+    .hero-meta-item strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 9px 18px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 14px 30px rgba(22, 163, 74, 0.55);
+      text-decoration: none;
+    }
+
+    .btn-primary span.icon {
+      font-size: 15px;
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 8px 15px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-ghost span.icon {
+      font-size: 15px;
+    }
+
+    .hero-note {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .hero-note strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, #0f172a, #020617 60%);
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-card-badge {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.12);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-card-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .hero-card-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .hero-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .mini-card {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 12px;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 10px;
+      font-size: 11px;
+    }
+
+    .mini-card-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    .mini-card-lang {
+      color: #bfdbfe;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .mini-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .mini-card-tag {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 10px;
+    }
+
+    .hero-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .hero-card-footer strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-card-footer a {
+      color: #bfdbfe;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 10px 20px 32px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 550;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .projects-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .project-card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 12px 12px 11px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project-name {
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .project-tag {
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .project-desc {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .project-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .lang-pill {
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.3);
+      color: #bfdbfe;
+      font-size: 10px;
+    }
+
+    .project-link {
+      color: #bfdbfe;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 12px 20px 16px;
+      font-size: 11px;
+      color: var(--muted);
+      background: radial-gradient(circle at top, #020617, #020617 60%, #020617 100%);
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner a {
+      color: #bfdbfe;
+      text-decoration: none;
+    }
+
+    .menu-toggle {
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* MOBILE */
+@media (max-width: 840px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    flex-direction: column;
+    background: rgba(15, 23, 42, 0.98);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    width: 220px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-logo">
+            <img src="https://avatars.githubusercontent.com/u/295870411?s=200&v=4" alt="UtiTeam logo">
+          </div>
+
+          <div>
+            <div class="brand-text-title">UtiTeam</div>
+            <div class="brand-text-sub">Python · Italia</div>
+          </div>
+        </div>
+        <div class="nav-right">
+
+  <button class="menu-toggle" id="menuToggle">☰</button>
+
+  <div class="nav-links" id="navLinks">
+
+    <div class="pill">
+      <span class="pill-dot"></span>
+      <span>Open source attivo</span>
+    </div>
+
+    <a href="/" class="nav-link">Home</a>
+    <a href="/community" class="nav-link">Community</a>
+    <a href="/docs/" class="nav-link">Documentazione</a>
+    <a href="https://github.com/utiteam-python" class="nav-link" target="_blank" rel="noreferrer">
+      GitHub
+    </a>
+
+  </div>
+</div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="hero-kicker">
+            <span>Nuova organizzazione</span> · Progetti Python minimalisti
+          </div>
+          <h1 class="hero-title">
+            Progetti <span>Python</span> per rendere il mondo
+            <span>più semplice</span>.
+          </h1>
+          <p class="hero-subtitle">
+            UtiTeam è una piccola organizzazione italiana che crea librerie e strumenti Python
+            con un obiettivo chiaro: meno fronzoli, più utilità reale.
+          </p>
+
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <strong>3</strong> repo pubblici
+            </div>
+            <div class="hero-meta-item">
+              <strong>Python</strong> come linguaggio principale
+            </div>
+            <div class="hero-meta-item">
+              <strong>Open source</strong> · MIT e Apache 2.0
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a
+              href="https://github.com/utiteam-python"
+              class="btn-primary"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="icon">⭐</span>
+              <span>Visita l’organizzazione su GitHub</span>
+            </a>
+            <a href="#progetti" class="btn-ghost">
+              <span class="icon">📦</span>
+              <span>Guarda i progetti</span>
+            </a>
+          </div>
+
+          <p class="hero-note">
+            <strong>Focus:</strong> documentazione, utilities e strumenti web leggeri per sviluppatori Python.
+          </p>
+        </div>
+
+        <aside class="hero-card">
+          <div class="hero-card-header">
+            <span>Snapshot rapido</span>
+            <div class="hero-card-badge">
+              <span class="hero-card-badge-dot"></span>
+              Attivo · Ultimi update recenti
+            </div>
+          </div>
+          <div class="hero-card-title">
+            Progetti principali UtiTeam
+          </div>
+          <div class="hero-card-grid">
+            <div class="mini-card">
+              <div class="mini-card-title">zompi</div>
+              <div class="mini-card-lang">Generatore di documentazione Python-centrico</div>
+              <div class="mini-card-meta">
+                <span>MIT</span>
+                <span class="mini-card-tag">Docs</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-card-title">utiilityes</div>
+              <div class="mini-card-lang">Crea GUI senza Sforzo.</div>
+              <div class="mini-card-meta">
+                <span>Apache 2.0</span>
+                <span class="mini-card-tag">GUI</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-card-title">DeWeb</div>
+              <div class="mini-card-lang">Strumenti per il web in Python</div>
+              <div class="mini-card-meta">
+                <span>Apache 2.0</span>
+                <span class="mini-card-tag">Web</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-card-title">Made in Italy</div>
+              <div class="mini-card-lang">Organizzazione italiana</div>
+              <div class="mini-card-meta">
+                <span>🇮🇹</span>
+                <span class="mini-card-tag">Community</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-card-footer">
+            <span><strong>UtiTeam</strong> · Python minimalista</span>
+            <a href="https://github.com/utiteam-python" target="_blank" rel="noreferrer">
+              Apri su GitHub →
+            </a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="progetti">
+        <div class="section-header">
+          <div class="section-title">Progetti principali</div>
+          <div class="section-subtitle">Una selezione dei repo pubblici dell’organizzazione.</div>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-header">
+              <div class="project-name">zompi</div>
+              <div class="project-tag">Documentazione</div>
+            </div>
+            <p class="project-desc">
+              Generatore di documentazione Python-centrico con temi modulari e un approccio minimalista.
+              Ideale per librerie e progetti tecnici.
+            </p>
+            <div class="project-meta">
+              <div class="project-meta-left">
+                <span class="dot"></span>
+                <span class="lang-pill">Python</span>
+              </div>
+              <a
+                href="https://github.com/utiteam-python/zompi"
+                class="project-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Apri repo →
+              </a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-header">
+              <div class="project-name">utiilityes</div>
+              <div class="project-tag">GUI</div>
+            </div>
+            <p class="project-desc">
+                Crea GUI con poco sforzo.
+            </p>
+            <div class="project-meta">
+              <div class="project-meta-left">
+                <span class="dot"></span>
+                <span class="lang-pill">Python</span>
+              </div>
+              <a
+                href="https://github.com/utiteam-python/utiilityes"
+                class="project-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Apri repo →
+              </a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-header">
+              <div class="project-name">DeWeb</div>
+              <div class="project-tag">Web</div>
+            </div>
+            <p class="project-desc">
+              Strumenti e componenti per semplificare lo sviluppo web in Python,
+              mantenendo un design pulito e minimale.
+            </p>
+            <div class="project-meta">
+              <div class="project-meta-left">
+                <span class="dot"></span>
+                <span class="lang-pill">Python</span>
+              </div>
+              <a
+                href="https://github.com/utiteam-python/DeWeb"
+                class="project-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Apri repo →
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span>© <span id="year"></span> UtiTeam · Progetti Python minimalisti.</span>
+        <span>
+          Codice su
+          <a href="https://github.com/utiteam-python" target="_blank" rel="noreferrer">GitHub</a>
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const btn = document.getElementById("menuToggle");
+  const menu = document.getElementById("navLinks");
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("active");
+  });
+
+  </script>
+</body>
+</html>
